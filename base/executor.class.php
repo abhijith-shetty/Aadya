@@ -50,7 +50,7 @@ class executor extends restBase{
   {
     header('Content-type: application/json');
 	
-    $response = json_encode(array('responseCode'=>autoload::$responseCode, "responseMsg"=>$this->responseMsg, "responseInfo"=>autoload::$responseInfo));
+    $response = json_encode(array('responseCode'=>autoload::$responseCode, "responseMsg"=>$this->responseMsg, "responseInfo"=>autoload::$responseInfo), JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK);
     return $response;
   }
   
