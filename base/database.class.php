@@ -11,16 +11,19 @@ class database
  
   public static function init($config)
   {
-    self::$connection = mysql_connect($config['db_server'], $config['db_username'], $config['db_password']);
-    if(!self::$connection) {
-      return false;
+    if($config['db_server']!= "")
+    {  
+      self::$connection = mysql_connect($config['db_server'], $config['db_username'], $config['db_password']);
+      if(!self::$connection) {
+        return false;
+      }
+      if(!mysql_select_db($config['db_name'], self::$connection)){
+        return false;
+      }
+      mysql_query("SET NAMES 'UTF8'", self::$connection);
+      //mysql_query("SET time_zone = 'America/Sao_Paulo'", self::$connection);
     }
-    if(!mysql_select_db($config['db_name'], self::$connection)){
-      return false;
-    }
-    mysql_query("SET NAMES 'UTF8'", self::$connection);
-    //mysql_query("SET time_zone = 'America/Sao_Paulo'", self::$connection);
-
+    
     return true;
   }
  

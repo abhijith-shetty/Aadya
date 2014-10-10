@@ -13,7 +13,8 @@
     <link href="static/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="static/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/jquery.jsonview.css" />
+    <link rel="stylesheet" href="static/css/style.css">
     <script src="static/javascript/jquery-1.10.1.min.js"></script>
     <script src="static/javascript/bootstrap.min.js"></script>
     <script type="text/javascript" src="static/javascript/jquery.jsonview.js"></script>
@@ -23,18 +24,18 @@
         $('#rest-submit').click(function(){
           $.ajax({
             type: "GET",
-            url: "index.php",
+            url: "../rest.php",
             data: $('#rest-form').serialize(),
             dataType: "json",
             beforeSend: function() {  },
             success: function(response) {
-              $("#request-url").html(window.location.protocol + "//" + window.location.host + "/"+this.url);
+              $("#request-url").html(document.getElementById("api-url").href + "?"+$('#rest-form').serialize());
               $("#response-block").JSONView(response);
               $(window).scrollTop(0);
               $('#result-block').show();
             },
             error: function(error){
-              $("#request-url").html(window.location.protocol + "//" + window.location.host + "/"+this.url);
+              $("#request-url").html(document.getElementById("api-url").href + "?"+$('#rest-form').serialize());
               $("#response-block").html(JSON.stringify(error.responseText));
               $(window).scrollTop(0);
               $('#result-block').show();
@@ -133,6 +134,7 @@
                   <tr>
                     <td></td>
                     <td>
+                      <a id="api-url" class="hide" href="../rest.php"></a>
                       <input type="hidden" name="methodName" value="<?php echo $_GET['methodName'];?>"/>
                       <input id="rest-submit" type="button" value="Submit" onclick="return true;"/>
                     </td>
