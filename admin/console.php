@@ -42,20 +42,21 @@
             }
           });
         });
-      });
       
-      $('#userId').focusout(function(){    
-        var userId = $("#userId").val() ;        
-        $.ajax({ 
-          url :"getAccessToken.php",            
-          data: {userId : userId},
-          dataType: "json",
-          beforeSend: function() { },
-          success: function(response) 
-          { 
-            $("#accessToken").val(response.accessToken);
-          }    
+        $('#userId').focusout(function(){    
+          var userId = $("#userId").val() ;        
+          $.ajax({ 
+            url :"getAccessToken.php",            
+            data: {userId : userId},
+            dataType: "json",
+            beforeSend: function() { },
+            success: function(response) 
+            { 
+              $("#accessToken").val(response.accessToken);
+            }    
+          });
         });
+        
       });
     </script>
   </head>
