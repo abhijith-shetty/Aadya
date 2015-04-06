@@ -25,6 +25,8 @@ class autoload
   static public function init($path, $options=array())
   {
     self::$basePath = $path;
+    require_once(self::$basePath.'/base/page.class.php');
+    require_once(self::$basePath.'/base/baseComponent.class.php');
     require_once(self::$basePath.'/base/database.class.php');
     require_once(self::$basePath.'/base/log.class.php');
     require_once(self::$basePath.'/library/global.php');
@@ -56,13 +58,26 @@ class autoload
   {
     require(self::$basePath.'/config/settings.php');
     
-    if(!database::init($setting)){
-      die('Could not connect to Database. Please contact administrator');
+    if(isset($setting['db_server']) && $setting['db_server'] !="")
+    {
+      if(!database::init($setting)){
+        die('Could not connect to Database. Please contact administrator');
+      }
     }
-
-    /* if(!memcacheLib::init($setting)){
-      die('Could not connect to Memcache Server. Please contact administrator');
-    } */
+    
+    if(isset($setting['memcache_server']) && $setting['memcache_server'] != "")
+    {
+      if(!memcacheLib::init($setting)){
+        die('Could not connect to Memcache Server. Please contact administrator');
+      }
+    }
+    
+    if(isset($setting['mongo_server']) && $setting['mongo_server'] != "")
+    {
+      if(!mongoLib::init($setting)){
+        die('Could not connect to Mongo DB. Please contact administrator');
+      }
+    }
     
     self::$_CONFIG = $setting;
     self::init_php_settings();
@@ -90,7 +105,21 @@ class autoload
   static public function init_php_settings()
   {
     //displaying error messages only during the test mode
-    //error_reporting(0);
+    if(getConfig("setup_mode")=="production"){
+      error_reporting(0);
+    } else {
+      error_reporting(E_ALL);
+    }
+
+    //initiating the session
+    if(!empty($_POST[getConfig('session_name')])) 
+    {
+      session_id($_POST[getConfig('session_name')]);
+      session_start();
+    } else {
+      session_name(getConfig('session_name'));
+      session_start();
+    }
     
     //setting the timezone
     if(getConfig("timezone")!=""){
@@ -153,17 +182,97 @@ class autoload
    */   
   static public function getPathByType($type, $options=array())
   {
-    $pathArray = array( "modules"  => "modules",
+    $pathArray = array( "baseModules" => "base",
+                        "modules"  => "modules",
                         "methods"  => "methods",
                         "base"     => "base",
                         "library"  => "library",
-                        "layout"   => "layout",
+                        "layout"   => "static/layout",
                         "config"   => "config",
+                        "task"     => "task",
                         "lang"     => "lang",
                         "static"   => "static",
                         "log"	   => "log"
     );
 	
     return isset($pathArray[$type])?$pathArray[$type]:'';
+  }
+  
+   /**
+   * Description: Includes javascript files that are included by component classes.
+   * Parameters:  filenames are recieved from $_SESSION['include_javascript'].
+   * Returns:     script tags of the file names recieved from session  
+   */  
+  static public function javascriptFiles()
+  {
+    $files = isset($_SESSION['include_javascript'])?$_SESSION['include_javascript']:'';
+	
+    if(!is_array($files))
+      return null;
+	  
+    $files = array_unique($files);
+    $basePath  = self::getPathByType('static');
+    $tags  = '';
+    
+    foreach($files as $file)
+    {
+      $path = "/".$basePath.'/javascript/'.$file;
+      $tags .= "<script type='text/javascript' src='$path'></script>\n";
+    }
+    
+    $_SESSION['include_javascript'] = '';
+    
+    return $tags;
+  }
+
+  /**
+   * Description: Includes stylesheet files that are included by component classes.
+   * Parameters:  filenames are recieved from $_SESSION['include_stylesheet'].
+   * Returns:     link tags of the file names recieved from session  
+   */   
+  static public function stylesheetFiles()
+  {
+    $files = isset($_SESSION['include_stylesheet'])?$_SESSION['include_stylesheet']:'';
+	
+    if(!is_array($files))
+      return null;
+    
+    $files = array_unique($files);
+    $basePath  = self::getPathByType('static');
+    $tags  = '';
+    
+    foreach($files as $file)
+    {
+      $path = "/".$basePath.'/css/'.$file;
+      $tags .= "<link type='text/css' rel='stylesheet' href='$path' />\n";
+    }
+    
+    $_SESSION['include_stylesheet'] = '';
+    
+    return $tags;
+  }
+ 
+  /**
+   * Description: Includes meta headers that are included by component classes.
+   * Parameters:  headers are recieved from $_SESSION['include_html_headers'].
+   * Returns:     meta tags of the headers recieved from session  
+   */ 
+  static public function htmlHeaders()
+  {
+    $headers = isset($_SESSION['include_html_headers'])?$_SESSION['include_html_headers']:'';
+    $tags = "<title>".(!empty($_SESSION['include_html_title'])?$_SESSION['include_html_title']:getConfig('project_title'))."</title>";
+    $_SESSION['include_html_title'] = '';
+    
+    if(is_array($headers))
+    {  
+      foreach($headers as $name=>$value)
+      {
+        $tags .= "<meta name='$name' content='$value' />\n";
+      }
+    
+      $_SESSION['include_html_headers'] = '';
+    }
+    
+    return $tags;
   }
 }

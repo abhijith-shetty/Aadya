@@ -29,6 +29,10 @@ class database
  
   public static function close() 
   {
+    if(!self::$connection){
+      return false;
+    }
+    
     $con = mysql_close(self::$connection);
     if(!$con) {
       return false;
@@ -42,8 +46,11 @@ class database
   {
     $resource = mysql_query($query, self::$connection);
 
-    if(!$resource) {
-      echo "<pre>SQL ERROR :".mysql_error(self::$connection)."</pre><pre>$query</pre>";
+    if(!$resource) 
+    {
+      if(getConfig('setup_mode') == "test") {
+        echo "<pre>SQL ERROR :".mysql_error(self::$connection)."</pre><pre>$query</pre>";
+      }
     }
 
     return $resource;
@@ -62,7 +69,9 @@ class database
 
       return $result;
     } else {
-      echo "<pre>SQL ERROR :".mysql_error(self::$connection)."</pre><pre>$query</pre>";
+      if(getConfig('setup_mode') == "test") {
+        echo "<pre>SQL ERROR :".mysql_error(self::$connection)."</pre><pre>$query</pre>";
+      }
     }
 
     return false;
@@ -76,7 +85,9 @@ class database
       $row = mysql_fetch_assoc($resource);
       return $row;
     } else {
-      echo "<pre>SQL ERROR :".mysql_error(self::$connection)."</pre><pre>$query</pre>";
+      if(getConfig('setup_mode') == "test") {
+        echo "<pre>SQL ERROR :".mysql_error(self::$connection)."</pre><pre>$query</pre>";
+      }
     }
 
     return false;
@@ -89,7 +100,9 @@ class database
     if($response) {
       return mysql_insert_id(self::$connection);
     } else {
-      echo "<pre>SQL ERROR :".mysql_error(self::$connection)."</pre><pre>$query</pre>";
+      if(getConfig('setup_mode') == "test") {
+        echo "<pre>SQL ERROR :".mysql_error(self::$connection)."</pre><pre>$query</pre>";
+      }
     }
 
     return $response;
@@ -102,7 +115,9 @@ class database
     if($response) {
       return $response;
     } else {
-      echo "<pre>SQL ERROR :".mysql_error(self::$connection)."</pre><pre>$query</pre>";
+      if(getConfig('setup_mode') == "test") {
+        echo "<pre>SQL ERROR :".mysql_error(self::$connection)."</pre><pre>$query</pre>";
+      }
     }
 
     return $response;
@@ -115,7 +130,9 @@ class database
     if($response) {
       return $response;
     } else {
-      echo "<pre>SQL ERROR :".mysql_error(self::$connection)."</pre><pre>$query</pre>";
+      if(getConfig('setup_mode') == "test") {
+        echo "<pre>SQL ERROR :".mysql_error(self::$connection)."</pre><pre>$query</pre>";
+      }
     }
 
     return $response;

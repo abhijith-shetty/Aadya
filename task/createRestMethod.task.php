@@ -29,7 +29,7 @@ if(!is_dir($dirPath))
 
 if(is_file($initFilePath) || is_file($actionFilePath))
 {
-  die("Files already exists\n");
+  die("API already exists\n");
 }
 
 $initContents = <<< 'EOT'

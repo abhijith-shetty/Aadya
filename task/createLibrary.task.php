@@ -25,7 +25,7 @@ $libraryFilePath = $libraryDirPath.'/'.$camelCaseName.'.lib.php';
 
 if(!is_dir($libraryDirPath))
 {
-	die("Library folder $libraryDirPath does not Exists");
+	mkdir($libraryDirPath);
 }
 
 if(is_file($libraryFilePath))

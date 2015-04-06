@@ -12,14 +12,15 @@ class executor extends restBase{
   {
     autoload::loadStrings();
     
-    if(!$this->verifyDefaultParameter($this->getDefaultParameter()))
+    autoload::loadFile('base', 'baseInitializer.class.php');
+    $baseInitializerInstance = new baseInitialize();
+    if(!$this->verifyDefaultParameter($baseInitializerInstance->getDefaultParameter()))
     {
       return false;
     }
     
     autoload::loadConfiguration();
     autoload::loadStrings($this->language);	
-
     
     if(!$this->methodExists($this->methodName))
     {
@@ -109,7 +110,7 @@ class executor extends restBase{
       $action->setMemberVariable($parameter, $response['value']);
     }
 	
-    $defaultParameters = $this->getDefaultParameter();
+    $defaultParameters = $initialize->getDefaultParameter();
     foreach($defaultParameters as $parameter=>$description)
     { 
       $action->setMemberVariable($parameter, $this->$parameter);
@@ -190,18 +191,6 @@ class executor extends restBase{
     }
 	
     return true;
-  }
-  
-  private function getDefaultParameter($options=array())
-  {
-    $defaultParameter = array();
-    $defaultParameter['language']       = array('name'=>'language', 'required'=>false, 'default'=>'en', 'description'=>'this parameter tells what response language should be');
-    $defaultParameter['methodName']     = array('name'=>'methodName', 'required'=>true, 'description'=>'this parameter holds the api name');
-    $defaultParameter['version']        = array('name'=>'version', 'required'=>false, 'description'=>'this parameter holds the api version number');
-    $defaultParameter['applicationKey'] = array('name'=>'applicationKey', 'required'=>true, 'description'=>'this parameter holds the application key');
-    $defaultParameter['responseFormat'] = array('name'=>'responseFormat', 'required'=>false, 'default'=>'json', 'description'=>'this parameter tells what response format should be');
-    
-    return $defaultParameter;
   }
 }
 ?>

@@ -16,6 +16,18 @@ class baseInitialize extends restBase
   
   public $_CONFIG = array();
     
+  public function getDefaultParameter($options=array())
+  {
+    $defaultParameter = array();
+    $defaultParameter['language']       = array('name'=>'language', 'required'=>false, 'default'=>'en', 'showInConsole'=>false, 'description'=>'this parameter tells what response language should be');
+    $defaultParameter['methodName']     = array('name'=>'methodName', 'required'=>true, 'showInConsole'=>false, 'description'=>'this parameter holds the api name');
+    $defaultParameter['version']        = array('name'=>'version', 'required'=>false, 'showInConsole'=>false, 'description'=>'this parameter holds the api version number');
+    $defaultParameter['applicationKey'] = array('name'=>'applicationKey', 'required'=>true, 'default'=>'12345', 'description'=>'this parameter holds the application key');
+    $defaultParameter['responseFormat'] = array('name'=>'responseFormat', 'required'=>false, 'showInConsole'=>false, 'default'=>'json', 'description'=>'this parameter tells what response format should be');
+    
+    return $defaultParameter;
+  }
+  
   public function getAuthParameter()
   {
     $authParameter = array();

@@ -15,9 +15,9 @@
     return isset(autoload::$_STRING[$key])?autoload::$_STRING[$key]:"";
   }
   
-  function getComponentUrl($moduleName, $componentName)
+  function getComponentUrl($moduleName, $componentName, $params = array())
   {
-    return '/'.$moduleName.'/'.$componentName;
+    return '?module='.$moduleName.'&component='.$componentName."&".http_build_query($params);
   }
   
   function isPost()
@@ -52,7 +52,7 @@
   
   function isLoggedInUser()
   {
-    if(isset($_SESSION['user_id']) && $_SESSION['user_id']!='' && is_numeric($_SESSION['user_id']))
+    if(isset($_SESSION['user_id']) && $_SESSION['user_id']!='')
     {
       return true;
     } else {
@@ -67,28 +67,5 @@
     header('Content-Type: application/json');
     echo json_encode(array('status'=>$status, 'message'=>$message));
     die();
-  }
-  
-  //getDevicePixelRatio
-  function getDR($devicePixelRatio, $options = array())
-  {
-    if($devicePixelRatio == 1){
-      return "mdpi";
-    } elseif($devicePixelRatio == 0.75){
-      return "ldpi";
-    } elseif($devicePixelRatio == 1.5){
-      return "hdpi";
-    } elseif($devicePixelRatio == 2){
-        if(isset($options['width']) && $options['width'] == 320){
-          return "iphone";
-        } else {
-          return "xhdpi";
-        }
-    } elseif($devicePixelRatio == 3){
-      return "xxhdpi";
-    }
-    
-    return "hdpi";
-  }
-  
+  }  
 ?>
