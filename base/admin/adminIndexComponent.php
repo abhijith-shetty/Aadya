@@ -15,8 +15,6 @@ class adminIndexComponent extends baseComponent
 	  $this->includeJavascript('jquery-1.10.1.min.js,bootstrap.min.js');
     $this->includeStylesheet("bootstrap.min.css,admin.css");
     
-    $userLib = autoload::loadLibrary('queryLib', 'user');
-    $userUtilityLib = autoload::loadLibrary('utilityLib', 'userUtility');
     $this->result = array('error'=>false);
     
     if(isLoggedInUser()){

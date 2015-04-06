@@ -1,10 +1,10 @@
 <?php 
 $setting["admin_username"] = "admin";
 $setting["admin_password"] = "password";
-$setting["db_server"] = "localhost";
-$setting["db_username"] = "root";
-$setting["db_password"] = "mqrgxzsa";
-$setting["db_name"] = "adya";
+$setting["db_server"] = "";
+$setting["db_username"] = "";
+$setting["db_password"] = "";
+$setting["db_name"] = "";
 $setting["memcache_server"] = "";
 $setting["memcache_port"] = "";
 $setting['mongo_server'] = "";

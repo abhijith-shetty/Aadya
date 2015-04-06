@@ -216,7 +216,7 @@ class autoload
     
     foreach($files as $file)
     {
-      $path = "/".$basePath.'/javascript/'.$file;
+      $path = $basePath.'/javascript/'.$file;
       $tags .= "<script type='text/javascript' src='$path'></script>\n";
     }
     
@@ -243,7 +243,7 @@ class autoload
     
     foreach($files as $file)
     {
-      $path = "/".$basePath.'/css/'.$file;
+      $path = $basePath.'/css/'.$file;
       $tags .= "<link type='text/css' rel='stylesheet' href='$path' />\n";
     }
     
