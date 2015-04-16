@@ -13,6 +13,7 @@ $templateFilePath  = $dirPath.'/'.$componentName.'Tpl.php';
 if(!is_dir($dirPath))
 {
 	mkdir($dirPath);
+  chmod($dirPath, 0777);
 }
 
 if(is_file($componentFilePath) || is_file($templateFilePath))
@@ -41,4 +42,7 @@ $componentContents = str_replace("ddmmyyyy", date('d-m-Y'), $componentContents);
 
 file_put_contents($componentFilePath, $componentContents);
 file_put_contents($templateFilePath, "");
+
+chmod($componentFilePath, 0777);
+chmod($templateFilePath, 0777);
 ?>

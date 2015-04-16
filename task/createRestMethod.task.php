@@ -20,11 +20,7 @@ $actionFilePath  = $dirPath.'/'.$className.'Action.class.php';
 if(!is_dir($dirPath))
 {
 	mkdir($dirPath);
-}
-
-if(!is_dir($dirPath))
-{
-	mkdir($dirPath);
+  chmod($dirPath, 0777);
 }
 
 if(is_file($initFilePath) || is_file($actionFilePath))
@@ -45,7 +41,7 @@ class ##$##Initialize extends baseInitialize{
     
     $parameter["title"] = array( "name"=>"title_exposed_to_api",
                                  "required"=>false,
-                                 "default"=>"default value",
+                                 "default"=>"",
                                  "description"=>"parameter description"
     );
     
@@ -76,8 +72,6 @@ class ##$##Action extends baseAction{
 }
 EOT;
 
-
-
 $initContents = str_replace("##$##", $className, $initContents);
 $initContents = str_replace("ddmmyyyy", date('d-m-Y'), $initContents);
 
@@ -86,4 +80,7 @@ $actionContents = str_replace("ddmmyyyy", date('d-m-Y'), $actionContents);
 
 file_put_contents($initFilePath, $initContents);
 file_put_contents($actionFilePath, $actionContents);
+
+chmod($initFilePath, 0777);
+chmod($actionFilePath, 0777);
 ?>

@@ -26,6 +26,7 @@ $libraryFilePath = $libraryDirPath.'/'.$camelCaseName.'.lib.php';
 if(!is_dir($libraryDirPath))
 {
 	mkdir($libraryDirPath);
+  chmod($libraryDirPath, 0777);
 }
 
 if(is_file($libraryFilePath))
@@ -107,4 +108,5 @@ $contents = str_replace("#", $camelCaseName, $contents);
 $contents = str_replace("^", $methodName, $contents);
 
 file_put_contents($libraryFilePath, $contents);
+chmod($libraryFilePath, 0777);
 ?>

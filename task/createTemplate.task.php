@@ -12,6 +12,7 @@ $templateFilePath  = $dirPath.'/'.$templateName.'Tpl.php';
 if(!is_dir($dirPath))
 {
 	mkdir($dirPath);
+  chmod($dirPath, 0777);
 }
 
 if(is_file($templateFilePath))
@@ -20,4 +21,5 @@ if(is_file($templateFilePath))
 }
 
 file_put_contents($templateFilePath, "");
+chmod($templateFilePath, 0777);
 ?>

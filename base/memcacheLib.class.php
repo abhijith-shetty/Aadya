@@ -12,7 +12,7 @@ class memcacheLib
   public static function init($config)
   {
     self::$connection = new Memcached();
-    self::$connection->setOption(Memcached::OPT_CLIENT_MODE, Memcached::DYNAMIC_CLIENT_MODE);
+    //self::$connection->setOption(Memcached::OPT_CLIENT_MODE, Memcached::DYNAMIC_CLIENT_MODE);
     self::$connection->addServer($config['memcache_server'], $config['memcache_port']);
     
     return (self::$connection->getVersion())?true:false;
