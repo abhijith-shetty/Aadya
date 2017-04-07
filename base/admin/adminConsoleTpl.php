@@ -17,7 +17,7 @@ $(document).ready(function(){
       },
       error: function(error){
         $("#request-url").html(document.getElementById("api-url").href + "?"+$('#rest-form').serialize());
-        $("#response-block").html(error.status+': '+error.statusText);
+        $("#response-block").html('<pre>ERROR: '+error.status+': '+error.statusText+'</pre><br/>'+error.responseText);
         $(window).scrollTop(0);
         $('#result-block').show();
       }
