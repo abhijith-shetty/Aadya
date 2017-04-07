@@ -21,6 +21,7 @@ $setting["ios_push_url"] = "gateway.sandbox.push.apple.com";
 $setting["default_module"] = "home";
 $setting["default_component"] = "index";
 $setting["setup_mode"] = "test";  //test, production
+$setting["enable_test_console"] = true;  //true, false
 $setting["session_name"] = "aadya-session";
 $setting["timezone"] = "";
 $setting["project_title"] = "Aadya";

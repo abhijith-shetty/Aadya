@@ -27,6 +27,7 @@
    public function renderMainAction()
    {
      if(is_file(autoload::getpath('baseModules', $this->moduleName.'/'.$this->pageName.'Component.php'))) {
+       if(!getConfig('enable_test_console')) {header("HTTP/1.0 401 Unauthorized");die("Page 832 - Access Denied. You are not authorized to view this page!");}
        autoload::loadFile('baseModules', $this->moduleName.'/'.$this->pageName.'Component.php');
 	   } else {
        autoload::loadFile('modules', $this->moduleName.'/'.$this->pageName.'Component.php');
