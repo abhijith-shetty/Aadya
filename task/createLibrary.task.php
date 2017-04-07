@@ -61,21 +61,19 @@ class #{
   {
     $sql = "SELECT *
             FROM @
-            WHERE @_id=".$#Id;
+            WHERE @_id=:#Id";
     
-    $result = database::doSelectOne($sql);
+    $result = database::doSelectOne($sql, array('#Id'=>$#Id));
     return $result;
   }
   
   public function insert^($options=array())
   {
-    $sql = "INSERT INTO @ SET "; 
-    foreach($options as $key=>$value){
-      $sql .= $key."='".$value."', ";
-    }    
-    $sql = rtrim($sql, ", ");
-	  
-    $result = database::doInsert($sql);
+    $sql = "INSERT INTO @ ";
+    $sql .= "( ".implode(", ", array_keys($options))." ) VALUES ";
+    $sql .= "( :".implode(", :", array_keys($options))." )";
+
+    $result = database::doInsert($sql, $options);
     return $result;
   }
   
@@ -83,22 +81,23 @@ class #{
   {
     $sql = "UPDATE @ SET "; 
     foreach($options as $key=>$value){
-      $sql .= $key."='".$value."', ";
+      $sql .= $key."= :".$key.", ";
     }    
     $sql = rtrim($sql, ", ");
-    $sql .= "WHERE @_id =".$#Id;
-	  
-    $result = database::doUpdate($sql);
+    $sql .= " WHERE @_id =:#Id";
+    $options['userId'] = $#Id;
+    
+    $result = database::doUpdate($sql, $options);
     return $result;
   }
   
   public function delete^($#Id, $options=array())
   {
-    $sql = "DELETE FROM @
-            WHERE @_id = ".$#Id; 
+    $sql = "DELETE FROM user
+            WHERE @_id = :#Id"; 
     
-	  $result = database::doDelete($sql);
-    return $result;
+	  $result = database::doDelete($sql, array('#Id'=>$#Id));
+    return $result; 
   }
 }
 EOT;
