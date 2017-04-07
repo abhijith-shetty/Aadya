@@ -192,6 +192,7 @@ class autoload
                         "task"     => "task",
                         "lang"     => "lang",
                         "static"   => "static",
+                        "i18n"   => "i18n",
                         "log"	   => "log"
     );
 	

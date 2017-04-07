@@ -2,11 +2,13 @@
 $(document).ready(function(){
   $('#rest-submit').click(function(){
     $.ajax({
-      type: "GET",
+      type: $('#requested-type').val(),
       url: "rest.php",
       data: $('#rest-form').serialize(),
       dataType: "json",
-      beforeSend: function() {  },
+      beforeSend: function() {
+        $("#response-block").html("<img src='<?php echo getConfig('base_domain_path').getConfig('static_path_image').'/loading_image.gif';?>'>");
+       },
       success: function(response) {
         $("#request-url").html(document.getElementById("api-url").href + "?"+$('#rest-form').serialize());
         $("#response-block").JSONView(response);
@@ -15,7 +17,7 @@ $(document).ready(function(){
       },
       error: function(error){
         $("#request-url").html(document.getElementById("api-url").href + "?"+$('#rest-form').serialize());
-        $("#response-block").html(JSON.stringify(error.responseText));
+        $("#response-block").html(error.status+': '+error.statusText);
         $(window).scrollTop(0);
         $('#result-block').show();
       }
@@ -56,6 +58,7 @@ $(document).ready(function(){
             <form id="rest-form" name="restform">
               <table class="table">
                 <tr><td>methodName:</td><td><strong><?php echo $_GET['methodName'];?></strong></td></tr>
+                <tr><td>requestMethod:</td><td><strong><select id="requested-type"><option value="GET">GET</option><option value="POST">POST</option></select></strong></td></tr>
                 <?php foreach($params as $param) { ?>
                   <?php if(isset($param['showInConsole']) && $param['showInConsole']==false){continue;}?>
                   <tr>
@@ -63,7 +66,7 @@ $(document).ready(function(){
                     <tr>
                       <td><?php echo $param['name'];?>:</td>
                       <td>
-                        <input name="<?php echo $param['name'];?>"  id="<?php echo $param['name'];?>" value="<?php echo isset($param['default'])?$param['default']:"";?>" class="col-md-12 text-box" />
+                        <input type="<?php echo $param['type'];?>" name="<?php echo $param['name'];?>"  id="<?php echo $param['name'];?>" value="<?php echo isset($param['default'])?$param['default']:"";?>" class="col-md-12 text-box" />
                         <small><?php echo $opt.$param['description'];?></small>
                       </td>
                     </tr>
