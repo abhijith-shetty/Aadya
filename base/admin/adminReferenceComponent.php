@@ -17,9 +17,11 @@ class adminReferenceComponent extends baseComponent
     
     autoload::loadFile('base', 'restBase.class.php');
     autoload::loadFile('base', 'baseInitializer.class.php');
+    require(autoload::getpath('i18n', 'response.en.php'));
+
     $path = autoload::getpath("methods", "");
     $apiList = scandir($path);
-    $result = array();
+    $apiList = array();
     
     foreach($apiList as $apiDirName)
     {
@@ -27,7 +29,7 @@ class adminReferenceComponent extends baseComponent
         continue;
       }
       
-      $result[$apiDirName] = array();
+      $apiList[$apiDirName] = array();
       $arr = explode('.', $apiDirName);
       $apiName = $arr[0].ucfirst($arr[1]);
       $apiInitClassName = $apiName.'Initialize';
@@ -42,10 +44,14 @@ class adminReferenceComponent extends baseComponent
         $desc .= $param['name']."<b>&nbsp;:&nbsp;</b>".$param['description']."<br/>";
       }
       
-      $result[$apiDirName]['inputParam'] = $inputParam;
-      $result[$apiDirName]['desc'] = $desc;
+      $apiList[$apiDirName]['inputParam'] = $inputParam;
+      $apiList[$apiDirName]['desc'] = $desc;
     }   
-   
-    $this->result = $result;  
+    
+    //constant values
+    $constantList = get_defined_constants(true)['user'];
+    $this->constantList = $constant;
+    $this->responseList = $response;  //included via i18n/response.en.php
+    $this->apiList = $apiList;  
   }
 }
