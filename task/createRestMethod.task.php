@@ -39,13 +39,13 @@ class ##$##Initialize extends baseInitialize{
   {
     $parameter = array();
     
-    $parameter["title"] = array( "name"=>"title_exposed_to_api",
-                                 "required"=>false,
-                                 "default"=>"",
-                                 "description"=>"parameter description"
+    $parameter["title"] = array(
+      "name"=>"title_exposed_to_api",
+      "type"=>"text",
+      "required"=>false,
+      "default"=>"",
+      "description"=>"parameter description"
     );
-    
-    
     
     return $parameter;
   }
