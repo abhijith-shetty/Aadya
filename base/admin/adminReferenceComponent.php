@@ -20,10 +20,10 @@ class adminReferenceComponent extends baseComponent
     require(autoload::getpath('i18n', 'response.en.php'));
 
     $path = autoload::getpath("methods", "");
-    $apiList = scandir($path);
+    $apiDirNameList = scandir($path);
     $apiList = array();
     
-    foreach($apiList as $apiDirName)
+    foreach($apiDirNameList as $apiDirName)
     {
       if(substr($apiDirName, 0, 1) == "."){
         continue;
@@ -50,7 +50,7 @@ class adminReferenceComponent extends baseComponent
     
     //constant values
     $constantList = get_defined_constants(true)['user'];
-    $this->constantList = $constant;
+    $this->constantList = $constantList;
     $this->responseList = $response;  //included via i18n/response.en.php
     $this->apiList = $apiList;  
   }
