@@ -85,7 +85,7 @@ class #{
     }    
     $sql = rtrim($sql, ", ");
     $sql .= " WHERE @_id =:#Id";
-    $options['userId'] = $#Id;
+    $options['#Id'] = $#Id;
     
     $result = database::doUpdate($sql, $options);
     return $result;
