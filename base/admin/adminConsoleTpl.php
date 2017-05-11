@@ -24,8 +24,8 @@ $(document).ready(function(){
     });
   });
 
-  $('#userId').focusout(function(){    
-    var userId = $("#userId").val() ;        
+  $('#user_id').focusout(function(){    
+    var userId = $("#user_id").val() ;        
     $.ajax({ 
       url :'<?php echo getComponentUrl('admin', 'getAccessToken');?>',            
       data: {userId : userId},
@@ -33,7 +33,7 @@ $(document).ready(function(){
       beforeSend: function() { },
       success: function(response) 
       { 
-        $("#accessToken").val(response.message);
+        $("#access_token").val(response.message);
       }    
     });
   });
