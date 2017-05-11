@@ -31,8 +31,8 @@ class baseInitialize extends restBase
   public function getAuthParameter()
   {
     $authParameter = array();
-    $authParameter['userId']  = array('name'=>'userId', 'required'=>true, 'description'=>'user_id of the logged in user');
-    $authParameter['accessToken']  = array('name'=>'accessToken', 'required'=>true, 'description'=>'this parameter holds the access token');
+    $authParameter['userId']  = array('name'=>'user_id', 'required'=>true, 'description'=>'user_id of the logged in user');
+    $authParameter['accessToken']  = array('name'=>'access_token', 'required'=>true, 'description'=>'this parameter holds the access token');
 	
     return $authParameter;
   }
