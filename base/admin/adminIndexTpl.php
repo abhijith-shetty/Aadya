@@ -1,10 +1,10 @@
 <div class="container">
   <div class="row content-block login-form">
     <div class="col-lg-12">
-      <form class="form-signin" action="<?php echo getComponentUrl('admin', 'index');?>" method="POST">
+      <form class="form-signin" action="<?php echo getComponentUrl('admin', 'index'); ?>" method="POST">
         <h2 class="form-signin-heading">Administrator Login</h2>
-        <?php if($result['error']) { ?>
-          <div class="alert alert-danger"><?php echo $result['message'];?></div>
+        <?php if ($result['error']) { ?>
+          <div class="alert alert-danger"><?php echo $result['message']; ?></div>
         <?php } ?>
         <label class="sr-only">Username:</label>
         <input name="username" type="text" required="" placeholder="username" class="form-control">

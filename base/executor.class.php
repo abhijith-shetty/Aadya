@@ -1,196 +1,186 @@
 <?php
+
 /**
  * Author : Abhijth Shetty
  * Date   : 21-01-2012
  * Desc   : This class is responsible for executing entire REST API
- */ 
-class executor extends restBase{
-  
-  private $responseMsg="";
-	
+ */
+class executor extends restBase
+{
+
+  private $responseMsg = "";
+
   public function executeMethod()
   {
     autoload::loadStrings();
-    
+
     autoload::loadFile('base', 'baseInitializer.class.php');
     $baseInitializerInstance = new baseInitialize();
-    if(!$this->verifyDefaultParameter($baseInitializerInstance->getDefaultParameter()))
-    {
+    if (!$this->verifyDefaultParameter($baseInitializerInstance->getDefaultParameter())) {
       return false;
     }
-    
+
     autoload::loadConfiguration();
-    autoload::loadStrings($this->language);	
-    
-    if(!$this->methodExists($this->methodName))
-    {
+    autoload::loadStrings($this->language);
+
+    if (!$this->methodExists($this->methodName)) {
       $this->setResponse("METHOD_NOT_FOUND");
       return false;
     }
-    
-    if(!$this->versionExists($this->version))
-    {
+
+    if (!$this->versionExists($this->version)) {
       $this->setResponse("VERSION_NOT_FOUND");
       return false;
     }
-    
-    if(!$this->executeInitializer())
-    {
+
+    if (!$this->executeInitializer()) {
       return false;
     }
-    
-    if(!$this->executeAction())
-    {
+
+    if (!$this->executeAction()) {
       return false;
     }
-    
+
     return true;
   }
-  
-  public function getResponse($options=array())
+
+  private function verifyDefaultParameter($parameters, $options = array())
   {
-    header('Content-type: application/json');
-	
-    $response = json_encode(array('responseCode'=>autoload::$responseCode, "responseMsg"=>$this->responseMsg, "responseInfo"=>autoload::$responseInfo), JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK);
-    return $response;
-  }
-  
-  private function executeInitializer($options=array())
-  {   
-    $initializeClass = str_replace(" ", "", lcfirst(ucwords(str_replace(".", " ", $this->methodName)))).'Initialize';
-    autoload::loadFile("methods", $this->methodName.'/'.$this->version.'/'.$initializeClass.'.class.php');
-    $initialize = new $initializeClass();
-	
-    if(!$this->isValidRequestMethod($initialize->requestMethod))
-    {
-      $this->setResponse('INVALID_REQUEST_METHOD');
-      return false;
-    }
-	 
-    if($initialize->isSecured)
-    {
-      $authParameters = $initialize->getAuthParameter();
-      foreach($authParameters as $parameter=>$description)
-      { 
-        $response = $this->verifyParameter($parameter, $description);
-        if(!$response['result']){return false;}
-      
-        $initialize->setMemberVariable($parameter, $response['value']);
-      }
-          
-      if(!$initialize->isValidAuthToken())
-      {
-        $this->setResponse('INVALID_AUTH_TOKEN');
+    foreach ($parameters as $parameter => $description) {
+      $response = $this->verifyParameter($parameter, $description);
+      if (!$response['result']) {
         return false;
       }
+
+      $this->setMemberVariable($parameter, $response['value']);
     }
-	
-    $initialize->_CONFIG = autoload::$_CONFIG;
-    $initialize->_LANG   = autoload::$_STRING;
-      
-    return true;    	
-  }
-  
-  private function executeAction($options=array())
-  {
-    $initializeClass = str_replace(" ", "", lcfirst(ucwords(str_replace(".", " ", $this->methodName)))).'Initialize';
-    autoload::loadFile("methods",$this->methodName.'/'.$this->version.'/'.$initializeClass.'.class.php');
-    $initialize = new $initializeClass();
-    
-    $actionClass = str_replace(" ", "", lcfirst(ucwords(str_replace(".", " ", $this->methodName)))).'Action';
-    autoload::loadFile("methods",$this->methodName.'/'.$this->version.'/'.$actionClass.'.class.php');
-    $action = new  $actionClass();
-	
-    $parameters = $initialize->getParameter();
-    foreach($parameters as $parameter=>$description)
-    { 
-      $response = $this->verifyParameter($parameter, $description);
-      if(!$response['result']){return false;}
-	  
-      $action->setMemberVariable($parameter, $response['value']);
-    }
-	
-    $defaultParameters = $initialize->getDefaultParameter();
-    foreach($defaultParameters as $parameter=>$description)
-    { 
-      $action->setMemberVariable($parameter, $this->$parameter);
-    }
-    
-    if($initialize->isSecured)
-    {
-      $authParameters = $initialize->getAuthParameter();
-      foreach($authParameters as $parameter=>$description)
-      { 
-        $action->setMemberVariable($parameter, $_REQUEST[$description['name']]);//quick fix untill YAML is implemented
-      }
-    }
-    $action->_CONFIG = autoload::$_CONFIG;
-    $action->_LANG   = autoload::$_STRING;
-    
-    $this->responseMsg = $action->execute();
-      
+
     return true;
   }
-  
-  private function methodExists($methodName, $options=array())
+
+  private function verifyParameter($name, $description, $options = array())
   {
-    if($methodName!="")
-    {
-      if(is_dir(autoload::getPathByType('methods').'/'.$methodName))
-      {
+    autoload::loadFile("base", "paramProcessor.class.php");
+    $paramProcessor = new paramProcessor();
+    $response = $paramProcessor->processParameter($description);
+    if (!$response['result']) {
+      return array("result" => false);
+    }
+
+    return array("result" => true, "value" => $response['value']);
+  }
+
+  private function methodExists($methodName, $options = array())
+  {
+    if ($methodName != "") {
+      if (is_dir(autoload::getPathByType('methods') . '/' . $methodName)) {
         $this->methodName = $methodName;
         return true;
       }
     }
-    
+
     return false;
   }
-  
-  private function versionExists($version, $options=array())
+
+  private function versionExists($version, $options = array())
   {
-    if($version!="")
-    {
-      $this->version = (is_dir(autoload::getPathByType('methods').'/'.$this->methodName.'/'.$version))?$version:"";
+    if ($version != "") {
+      $this->version = (is_dir(autoload::getPathByType('methods') . '/' . $this->methodName . '/' . $version)) ? $version : "";
     }
-    
+
     return true;
   }
-  
-  private function isValidRequestMethod($requestMethod, $options=array())
+
+  private function executeInitializer($options = array())
   {
-    if(!in_array($_SERVER['REQUEST_METHOD'],$requestMethod))
-    {
+    $initializeClass = str_replace(" ", "", lcfirst(ucwords(str_replace(".", " ", $this->methodName)))) . 'Initialize';
+    autoload::loadFile("methods", $this->methodName . '/' . $this->version . '/' . $initializeClass . '.class.php');
+    $initialize = new $initializeClass();
+
+    if (!$this->isValidRequestMethod($initialize->requestMethod)) {
       $this->setResponse('INVALID_REQUEST_METHOD');
       return false;
     }
-    
+
+    if ($initialize->isSecured) {
+      $authParameters = $initialize->getAuthParameter();
+      foreach ($authParameters as $parameter => $description) {
+        $response = $this->verifyParameter($parameter, $description);
+        if (!$response['result']) {
+          return false;
+        }
+
+        $initialize->setMemberVariable($parameter, $response['value']);
+      }
+
+      if (!$initialize->isValidAuthToken()) {
+        $this->setResponse('INVALID_AUTH_TOKEN');
+        return false;
+      }
+    }
+
+    $initialize->_CONFIG = autoload::$_CONFIG;
+    $initialize->_LANG = autoload::$_STRING;
+
     return true;
   }
-  
-  private function verifyParameter($name, $description, $options=array())
+
+  private function isValidRequestMethod($requestMethod, $options = array())
   {
-    autoload::loadFile("base","paramProcessor.class.php");
-    $paramProcessor = new paramProcessor();
-    $response = $paramProcessor->processParameter($description);
-    if(!$response['result'])
-    {
-      return array("result"=>false);
+    if (!in_array($_SERVER['REQUEST_METHOD'], $requestMethod)) {
+      $this->setResponse('INVALID_REQUEST_METHOD');
+      return false;
     }
-    
-    return array("result"=>true, "value"=>$response['value']);
+
+    return true;
   }
-  
-  private function verifyDefaultParameter($parameters, $options=array())
+
+  private function executeAction($options = array())
   {
-    foreach($parameters as $parameter=>$description)
-    { 
+    $initializeClass = str_replace(" ", "", lcfirst(ucwords(str_replace(".", " ", $this->methodName)))) . 'Initialize';
+    autoload::loadFile("methods", $this->methodName . '/' . $this->version . '/' . $initializeClass . '.class.php');
+    $initialize = new $initializeClass();
+
+    $actionClass = str_replace(" ", "", lcfirst(ucwords(str_replace(".", " ", $this->methodName)))) . 'Action';
+    autoload::loadFile("methods", $this->methodName . '/' . $this->version . '/' . $actionClass . '.class.php');
+    $action = new  $actionClass();
+
+    $parameters = $initialize->getParameter();
+    foreach ($parameters as $parameter => $description) {
       $response = $this->verifyParameter($parameter, $description);
-      if(!$response['result']){return false;}
-	  
-      $this->setMemberVariable($parameter, $response['value']);
+      if (!$response['result']) {
+        return false;
+      }
+
+      $action->setMemberVariable($parameter, $response['value']);
     }
-	
+
+    $defaultParameters = $initialize->getDefaultParameter();
+    foreach ($defaultParameters as $parameter => $description) {
+      $action->setMemberVariable($parameter, $this->$parameter);
+    }
+
+    if ($initialize->isSecured) {
+      $authParameters = $initialize->getAuthParameter();
+      foreach ($authParameters as $parameter => $description) {
+        $action->setMemberVariable($parameter, $_REQUEST[$description['name']]);//quick fix untill YAML is implemented
+      }
+    }
+    $action->_CONFIG = autoload::$_CONFIG;
+    $action->_LANG = autoload::$_STRING;
+
+    $this->responseMsg = $action->execute();
+
     return true;
+  }
+
+  public function getResponse($options = array())
+  {
+    header('Content-type: application/json');
+
+    $response = json_encode(array('responseCode' => autoload::$responseCode, "responseMsg" => $this->responseMsg, "responseInfo" => autoload::$responseInfo), JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK);
+    return $response;
   }
 }
+
 ?>

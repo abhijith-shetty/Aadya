@@ -1,4 +1,4 @@
-<?php 
+<?php
 $setting["admin_username"] = "admin";
 $setting["admin_password"] = "password";
 $setting["db_server"] = "";
@@ -25,4 +25,3 @@ $setting["enable_test_console"] = true;  //true, false
 $setting["session_name"] = "aadya-session";
 $setting["timezone"] = "";
 $setting["project_title"] = "Aadya";
-?>
