@@ -3,7 +3,7 @@
  * Author : Abhijth Shetty
  * Date   : 16-12-2010
  * Desc   : This class contains base methods for a component class
- */ 
+ */
 abstract class baseComponent
 {
   //member variable cantaining the default layout name
@@ -51,7 +51,7 @@ abstract class baseComponent
   }
 
   /**
-  * Used to include Javascript files from component class. 
+  * Used to include Javascript files from component class.
   *
   * @param  string $fileName    javascript filename, can be comma separated
   * @Example :
@@ -61,37 +61,39 @@ abstract class baseComponent
   */
   public function includeJavascript($fileName)
   {
+    $_SESSION['include_javascript'] = [];
     $names = explode(',', $fileName);
     foreach($names as $name)
     {
       $_SESSION['include_javascript'][] = $name;
-    }  
+    }
 
     return true;
   }
 
   /**
-  * Used to include Stylesheet files from component class. 
+  * Used to include Stylesheet files from component class.
   *
   * @param  string $fileName    stylesheet filename, can be comma separated
   * @Example :
   *            $this->includeStylesheet('style1.css');
   *            $this->includeStylesheet('style1.css, style2.css, style3.css');
   * @return true on successfull execution
-  */   
+  */
   public function includeStylesheet($fileName)
   {
+    $_SESSION['include_stylesheet'] = [];
     $names = explode(',', $fileName);
     foreach($names as $name)
     {
       $_SESSION['include_stylesheet'][] = $name;
-    }  
+    }
 
     return true;
   }
 
   /**
-  * Used to include Html Headers from component class. 
+  * Used to include Html Headers from component class.
   *
   * @param  array $headers    metaName=>metaValue
   * @Example :
@@ -101,21 +103,22 @@ abstract class baseComponent
   */
   public function includeHtmlHeader($headers=array())
   {
+    $_SESSION['include_html_headers'] = [];
     foreach($headers as $name=>$value)
     {
       $_SESSION['include_html_headers'][$name] = $value;
-    }  
+    }
 
     return true;
   }
 
   /**
-  * Used to include Html Title tag from component class. 
+  * Used to include Html Title tag from component class.
   *
-  * @param  string $title    
+  * @param  string $title
   * @Example :
   *            $this->setTitle('Toaki|Home');
-  *            
+  *
   * @return true on successfull execution
   */
   public function setTitle($title)
@@ -123,13 +126,13 @@ abstract class baseComponent
     $_SESSION['include_html_title'] = $title;
 
     return true;
-  }  
+  }
 
-  /** 
+  /**
   * Used to redirect to different page.
   *
   * @param  string @link  path were the redirect should happen.
-  * @example : 
+  * @example :
   *            $this->redirect('home/index');
   *
   * @return : sends a 302 temporary redirect to browser
