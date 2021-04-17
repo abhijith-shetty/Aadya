@@ -14,5 +14,5 @@ CREATE TABLE IF NOT EXISTS `user` (
   `created_at` datetime NOT NULL,
   `status` tinyint(4) NOT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;//
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

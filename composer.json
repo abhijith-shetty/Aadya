@@ -1,0 +1,25 @@
+{
+    "name": "abhijith-shetty/aadya",
+    "description": "Simple Open source framework for creating REST API's",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Abhijith Shetty",
+            "email": "abhijith_shetty@ymail.com"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "library/",
+            "base/"
+        ],
+        "files": [
+            "library/global.php"
+        ]
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.2|^8.0"
+    }
+}

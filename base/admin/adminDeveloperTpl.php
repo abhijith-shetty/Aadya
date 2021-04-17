@@ -3,10 +3,22 @@
     <div class="col-md-2 block">
       <h4>Actions</h4>
       <table class="table">
-        <tr><td><a href="<?php echo getComponentUrl('admin', 'developer', array('action'=>'createRESTAPI'))?>">Create REST API</a></td></tr>
-        <tr><td><a href="<?php echo getComponentUrl('admin', 'developer', array('action'=>'createModule'))?>">Create UI Module</a></td></tr>
-        <tr><td><a href="<?php echo getComponentUrl('admin', 'developer', array('action'=>'createLibrary'))?>">Create Library</a></td></tr>
-        <tr><td><a href="<?php echo getComponentUrl('admin', 'developer', array('action'=>'configEditor'))?>">Config Editor</a></td></tr>
+        <tr>
+          <td><a href="<?php echo getComponentUrl('admin', 'developer', array('action' => 'createRESTAPI')) ?>">Create
+              REST API</a></td>
+        </tr>
+        <tr>
+          <td><a href="<?php echo getComponentUrl('admin', 'developer', array('action' => 'createModule')) ?>">Create UI
+              Module</a></td>
+        </tr>
+        <tr>
+          <td><a href="<?php echo getComponentUrl('admin', 'developer', array('action' => 'createLibrary')) ?>">Create
+              Library</a></td>
+        </tr>
+        <tr>
+          <td><a href="<?php echo getComponentUrl('admin', 'developer', array('action' => 'configEditor')) ?>">Config
+              Editor</a></td>
+        </tr>
       </table>
     </div>
     <div class="col-md-10">
