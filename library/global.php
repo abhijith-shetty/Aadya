@@ -1,18 +1,18 @@
 <?php
 function getConfig($key)
 {
-  return isset(autoload::$_CONFIG[$key]) ? autoload::$_CONFIG[$key] : "";
+  return autoload::$_CONFIG[$key] ?? "";
 }
 
 function setConfig($key, $value)
 {
   autoload::$_CONFIG[$key] = $value;
-  return isset(autoload::$_CONFIG[$key]) ? autoload::$_CONFIG[$key] : "";
+  return autoload::$_CONFIG[$key] ?? "";
 }
 
 function getString($key)
 {
-  return isset(autoload::$_STRING[$key]) ? autoload::$_STRING[$key] : "";
+  return autoload::$_STRING[$key] ?? "";
 }
 
 function getComponentUrl($moduleName, $componentName, $params = array())
@@ -22,7 +22,7 @@ function getComponentUrl($moduleName, $componentName, $params = array())
 
 function isPost()
 {
-  return ($_SERVER['REQUEST_METHOD'] == 'POST') ? true : false;
+  return $_SERVER['REQUEST_METHOD'] == 'POST';
 }
 
 function getUserId()
@@ -37,26 +37,22 @@ function getUserRole()
 
 function isAdmin()
 {
-  return (isset($_SESSION['user_role']) && $_SESSION['user_role'] == USER_ROLE_ADMIN) ? true : false;
+  return isset($_SESSION['user_role']) && $_SESSION['user_role'] == USER_ROLE_ADMIN;
 }
 
 function isUserRole($roleId)
 {
-  return (getUserRole() == $roleId) ? true : false;
+  return getUserRole() == $roleId;
 }
 
 function isOwner($userId)
 {
-  return ($userId == getUserId()) ? true : false;
+  return $userId == getUserId();
 }
 
 function isLoggedInUser()
 {
-  if (isset($_SESSION['user_id']) && $_SESSION['user_id'] != '') {
-    return true;
-  } else {
-    return false;
-  }
+  return isset($_SESSION['user_id']) && $_SESSION['user_id'] != '';
 }
 
 function sendAjaxResponse($status = true, $message = "", $options = array())
