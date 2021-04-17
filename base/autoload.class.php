@@ -25,32 +25,19 @@ class autoload
   static public function init($path, $options=array())
   {
     self::$basePath = $path;
-    require_once(self::$basePath.'/base/page.class.php');
-    require_once(self::$basePath.'/base/baseComponent.class.php');
-    require_once(self::$basePath.'/base/database.class.php');
-    require_once(self::$basePath.'/base/log.class.php');
-    require_once(self::$basePath.'/library/global.php');
     require_once(self::$basePath.'/library/constants.php');
-	
+
     self::loadConfiguration();
-    self::loadStrings(getConfig('language'));	
-	
+    self::loadStrings(getConfig('language'));
+
     return true;
   }
   
   static public function initRest($path, $options=array())
   {
     self::$basePath = $path;
-    require_once(self::$basePath.'/base/restBase.class.php');
-    require_once(self::$basePath.'/base/executor.class.php');
-    require_once(self::$basePath.'/base/baseInitializer.class.php');
-    require_once(self::$basePath.'/base/baseAction.class.php');
-    require_once(self::$basePath.'/base/database.class.php');
-    require_once(self::$basePath.'/base/log.class.php');
-    require_once(self::$basePath.'/library/global.php');
     require_once(self::$basePath.'/library/constants.php');
-    require_once(self::$basePath.'/base/memcacheLib.class.php');
-    
+
     return true;
   }
   

@@ -5,7 +5,7 @@
 */
 //allowing Cross Domain Request
 header("Access-Control-Allow-Origin: *");
-require_once(dirname(__FILE__)."/base/autoload.class.php");
+require __DIR__.'/vendor/autoload.php';
 autoload::initRest(dirname(__FILE__));
 $project = new executor();
 $project->executeMethod();
